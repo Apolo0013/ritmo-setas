@@ -1,8 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
-import type { ParamHandlerKeyDown, Validkeys } from './type'
+import { useState, type RefObject } from 'react'
+//Type
+import {type ParamHandlerKeyDown, validKey } from './type'
+//Store
+import { gameState } from '../store/game.store'
 
 
-function useHitZone() {
+type ParamuseHitZone = {
+    refDetector: RefObject<HTMLDivElement | null>,
+    refParent: RefObject<HTMLDivElement | null>
+}
+
+function useHitZone({
+    refDetector,
+    refParent
+}: ParamuseHitZone) {
     function keyAlreadyCliked(el: HTMLElement): boolean {
         //true: essa tecla ja foi clicada ou algo deu errado
         //el: é o elemento que representa a ceta
@@ -56,28 +67,23 @@ function useHitZone() {
         const keyDataStr: string | undefined = elTarget.dataset.direction
         if (!keyDataStr) return //caso nao nao tenha.
         const keyData = keyDataStr as Validkeys
-        //Agora temos as direcao que dois.  
-        console.log(keyCode)
-        console.log(keyData)
-        if (keyCode == keyData) console.log('Acertou.')
-        else console.log('erroru')
+        //Agora temos as direcao que dois.     
+        //!-
+        if (keyCode == keyData) {
+            setScore()
+            elTarget.classList.add('key-move-certificate')
+        }
+        else elTarget.classList.add('key-move-wrong')
+        console.log(keyCode == keyData ? 'Acertou' : 'errou')
     }
-
-    //key validos
-    const validKey: Validkeys[] = ['ArrowUp','ArrowLeft','ArrowDown','ArrowRight']
-
-    const refDetector = useRef<HTMLDivElement | null>(null)
-    const refParent = useRef<HTMLDivElement | null>(null)
     //state
     //state que irar guardar
-    const [listOfKeysClicked, setlistOfKeysClicked] = useState<string[]>([])
-    useEffect(() => {
-        console.log(listOfKeysClicked)
-    }, [listOfKeysClicked])
+    const [_, setlistOfKeysClicked] = useState<string[]>([])
+    //Store.
+    //Pegar o "alterado" de score
+    const setScore = gameState(state => state.increaseScore)
     return {
-        HandlerKeyDown,
-        refDetector,
-        refParent
+        HandlerKeyDown
     }
 }
 

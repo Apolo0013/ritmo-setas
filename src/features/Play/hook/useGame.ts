@@ -1,0 +1,96 @@
+import { useEffect, useRef, useState, type RefObject } from "react"
+import { directions, validKey, type Direction, type Validkeys } from "./type"
+
+type ParamuseGame = {
+    refDetector: RefObject<HTMLDivElement | null>,
+    refParent: RefObject<HTMLDivElement | null>,
+    refAudio: RefObject<HTMLAudioElement | null>
+}
+
+type GradeInformation = {
+    time: number,
+    order: number,
+    lane: number,
+    direction: Validkeys,
+    angle: Direction
+}
+
+interface GradeInformationEl extends GradeInformation {
+    el: HTMLElement
+}
+
+type ParamgetX = {
+    noteTime: number,
+    currentTime: number
+}
+
+function useGame({ 
+    refDetector,
+    refParent,
+    refAudio
+}: ParamuseGame) {
+    function randint(min: number, max: number): number {
+       return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getX({ currentTime, noteTime }: ParamgetX): number {
+        //caso distance seja 0
+        if (distance.current == 0) return 0
+        const spawnTime: number = noteTime - travelTime
+        const progress: number = (currentTime - spawnTime) / travelTime
+        return spawnX + progress * distance.current
+    }
+
+    function GenerateNotes(): GradeInformation[]  | null{
+        if (!refAudio.current) return null
+        let order: number = 0 // indice da order
+        const gradeInfoTemp: GradeInformation[] = [] // lista temporaria
+        let timeCount: number = randint(3000, 5000)
+
+        while (true) {
+            //direcao sorteanda
+            const direction: Validkeys = validKey[randint(0, 3)]
+            gradeInfoTemp.push({
+                lane: 0,
+                time: timeCount,
+                order: order,
+                direction: direction,
+                angle: directions[direction]
+            })
+            order++
+            timeCount += randint(2000, 5000)
+            //parar quando o time Count ultrapassa a duracao do audio
+            if ((timeCount / 1000) >= refAudio.current.duration) 
+                return gradeInfoTemp // retornando a lista ja gerada
+        }
+    }
+
+    const travelTime: number = 2000
+    const spawnX: number = -100
+    const distance = useRef<number>(0)
+    //notas geradas
+    const [notes, setnotes] = useState<GradeInformation[] | null>([])
+    const refNotesEl = useRef<GradeInformationEl[]>([])
+    
+    useEffect(() => {
+        if (!refParent.current || !refDetector.current || !refAudio.current) return
+        const audio: HTMLAudioElement = refAudio.current
+        //informacao
+        const detectorX: number = refDetector.current.getBoundingClientRect().x
+        distance.current = detectorX - spawnX
+        //
+        audio.addEventListener('loadedmetadata', () => setnotes(GenerateNotes()))
+        return () => audio.removeEventListener('loadedmetadata', GenerateNotes)
+    }, [refAudio, refDetector, refParent])
+
+    useEffect(() => {
+        console.log(refNotesEl.current)
+    }, [refNotesEl])
+
+    return {
+        notes,
+        refNotesEl
+    }
+}
+
+export default useGame

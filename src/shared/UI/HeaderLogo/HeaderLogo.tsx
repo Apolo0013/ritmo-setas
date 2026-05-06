@@ -10,7 +10,7 @@ function HeaderLogo() {
                 src={ImgControl}
                 alt="Imagem de um controle"
             />
-            <h1>Cetas Ritmo</h1>
+            <h1>Setas Ritmo</h1>
         </div>
     )   
 }
