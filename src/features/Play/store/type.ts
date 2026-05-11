@@ -4,7 +4,7 @@ import type { StateCreator } from "zustand"
 export type GameState = {
     score: number, // score real.
     increaseScore: (value?: number) => void, // a funcao que vai add esse valor
-    scoreView: number // score apenas para exbicao
+    scoreView: number, // score apenas para exbicao,
 }
 
 export type ParamAnimationCounter = {

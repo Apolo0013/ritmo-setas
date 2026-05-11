@@ -4,7 +4,7 @@ import { directions, validKey, type Direction, type Validkeys } from "./type"
 type ParamuseGame = {
     refDetector: RefObject<HTMLDivElement | null>,
     refParent: RefObject<HTMLDivElement | null>,
-    refAudio: RefObject<HTMLAudioElement | null>
+    refAudio: RefObject<HTMLAudioElement | null> | null
 }
 
 type GradeInformation = {
@@ -42,7 +42,7 @@ function useGame({
     }
 
     function render() {
-        if (!refAudio.current) return
+        if (!refAudio || !refAudio.current) return
         const currentTime: number = refAudio.current.currentTime * 1000
         refNotesEl.current.forEach(({ el, time, angle}) => {
             const X: number = getX({ // calculo o eixo X dele
@@ -109,7 +109,7 @@ function useGame({
     }, [refAudio, refDetector, refParent])
 
     useEffect(() => {
-        if (!refAudio.current) return
+        if (!refAudio || !refAudio.current) return
         const audio: HTMLAudioElement = refAudio.current
         audio.addEventListener('loadedmetadata', () => {
             setnotes(GenerateNotes())

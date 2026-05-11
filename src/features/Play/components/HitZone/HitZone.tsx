@@ -8,12 +8,15 @@ import { useEffect, useRef } from 'react'
 //services
 import { addCallBackKeyDown } from '../../../../shared/services/keydownManager'
 import useGame from '../../hook/useGame'
+import { useAudio } from '../../store/audioContext/useAudio'
 
 function HitZone() {
     //ref
     const refDetector = useRef<HTMLDivElement | null>(null)
     const refParent = useRef<HTMLDivElement | null>(null)
-    const refAudio = useRef<HTMLAudioElement | null>(null)
+    //const refAudio = useRef<HTMLAudioElement | null>(null)
+    //context
+    const { refAudio } = useAudio()!
     //hook
     const {
         HandlerKeyDown
@@ -30,7 +33,7 @@ function HitZone() {
         refParent,
         refAudio
     })
-
+    //faca que o menuplay tenha o poder de play/pause e teste o contexto
     //use Effect
     useEffect(() => {
         addCallBackKeyDown((e) => HandlerKeyDown({

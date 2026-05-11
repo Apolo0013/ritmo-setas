@@ -1,6 +1,6 @@
 import './Content.scss'
 //imagem
-import ImgPlay from '../../assets/play.svg'
+import ImgPlay from '../../../../shared/assets/play.svg'
 import {imagens} from '../../../../shared/assets/index'
 //Funcao utils
 import { useEffect, useRef } from 'react'

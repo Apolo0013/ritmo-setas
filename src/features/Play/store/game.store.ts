@@ -20,8 +20,6 @@ function AnimationCounter({ set, get }: ParamAnimationCounter) {
     }, 50)
 }
 
-
-
 export const gameState = create<GameState>((set, get) => ({
     score: 0,
     scoreView: 0,
