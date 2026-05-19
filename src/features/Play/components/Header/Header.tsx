@@ -4,16 +4,18 @@ import HeaderLogo from '../../../../shared/UI/HeaderLogo/HeaderLogo'
 import './Header.scss'
 //store
 import { gameState } from '../../store/game.store'
+import { menuPlayState } from '../../store/menuPlay.store'
 //imagens
 import PauseImg from '../../assets/pause-default.svg'
-//store
-import { menuPlayState } from '../../store/menuPlay.store'
+import { useAudio } from '../../store/audioContext/useAudio'
 
 
 function Header() {
     const valueCurrentScore: number = gameState(state => state.scoreView)
+    const {pauseAudio} = useAudio()!
     //store
     const setIsShow = menuPlayState(state => state.setIsShow)
+    const setIsPause = menuPlayState(state => state.setIsPause)
     return (    
         <header className='wraper-play-header'>
             <div className='play-header'>
@@ -25,7 +27,11 @@ function Header() {
             </div>
             <button
                 className='btn-pause'
-                onClick={() => setIsShow(true)}
+                onClick={() => {
+                    setIsPause(true) // ele estarar true, mas vamos garantir esse valor nele
+                    setIsShow(true) // mostrar a UI
+                    pauseAudio() // pausa o audio.
+                }}
             >
                 <img
                     src={PauseImg}

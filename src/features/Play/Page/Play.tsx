@@ -14,13 +14,14 @@ import './Play.scss'
 
 function Play() {
     const isShow: boolean = menuPlayState(state => state.isShow)
+    const isPause = menuPlayState(state => state.isPause)
     const isCount: boolean = countDownState(state => state.isCount)
     return (
         <main className='play'>
             <AudioProvider>    
                 <AudioPlayer />
                 { 
-                    isCount
+                    isCount && isPause
                         ? <CountDown />
                         : null
                 }

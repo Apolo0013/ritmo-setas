@@ -14,7 +14,9 @@ export const menuPlayState = create<MenuPlayState>((set) => ({
         isShow: value
     }),
     // responsavel por dizer oq exbir, start ou stop
-    isPause: true,
+    isPause: false,
+    // false: nao esta pausado
+    // true: esta pausado
     setIsPause: (value: boolean) => set({
         isPause: value
     })

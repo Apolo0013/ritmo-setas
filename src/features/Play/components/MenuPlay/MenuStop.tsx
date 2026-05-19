@@ -6,10 +6,15 @@ import ImgHome from '../../assets/home.svg'
 ///store e context
 import { menuPlayState } from '../../store/menuPlay.store'
 import { useNavigate } from 'react-router-dom'
+import { useAudio } from '../../store/audioContext/useAudio'
+import { countDownState } from '../../store/countDown.store'
 
 
 function MenuStop() {
     const setIsShow = menuPlayState(state => state.setIsShow)
+    const TimeOutCount = countDownState(state => state.TimeOutCount)
+    const { playAudio } = useAudio()!
+    //
     const nv = useNavigate()
     return (
         <div className="menu-stop">
@@ -26,6 +31,10 @@ function MenuStop() {
                     className='menu-play-btn menu-play-btn-primary'
                     onClick={() => {
                         setIsShow(false)
+                        //
+                        TimeOutCount(playAudio) // time ja pronto.
+                        //3s é o tempo de animacao.
+                        setTimeout(async () => await playAudio(), 3000)
                     }}
                 >
                     <img

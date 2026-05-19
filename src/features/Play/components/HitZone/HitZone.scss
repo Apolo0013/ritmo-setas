@@ -25,7 +25,10 @@
         gap: 68px;
 
         .key-move {
-            transition: 0.3s ease-in-out;
+            transition: 
+                box-shadow 0.3s ease-in-out,
+                border 0.3s ease-in-out
+            ;
             border: $width-border solid $color-border;
             box-shadow: 0 0 0 0px black;
             height: 110px;

@@ -6,14 +6,13 @@ import MenuStop from './MenuStop'
 
 function MenuPlay() {
     //store
-    const isBegin: boolean = menuPlayState(state => state.isBegin)
-
-
+    const isPause: boolean = menuPlayState(state => state.isPause)
+    console.log(isPause)
     return (
         <div className='wraper-menu-play'>
             <div className="menu-play">
                 {
-                    !isBegin 
+                    !isPause
                         ? <MenuStart />
                         : <MenuStop />
                 }
