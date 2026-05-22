@@ -1,0 +1,23 @@
+@use './pallete' as plt; 
+
+@mixin scanner-loanding {
+    animation: scanner-loanding 1s linear infinite forwards;
+    $column-bg: rgba(plt.$bg-surface, 0.5); 
+    background: linear-gradient(
+        80deg,
+        plt.$bg-surface 30%,
+        $column-bg 30%,
+        $column-bg 60%,
+        plt.$bg-surface 60%
+    );
+    background-size: 90px 100%;
+
+    @keyframes scanner-loanding {
+        from {
+            background-position: 0 0;
+        }
+        to {
+            background-position: 90px 0;
+        }
+    }
+}

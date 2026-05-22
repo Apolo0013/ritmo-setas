@@ -1,6 +1,6 @@
-import { useEffect, useState, type RefObject } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
 //Type
-import {type ParamHandlerKeyDown, validKey, type Validkeys } from './type'
+import {type ParamCheckCombo, type ParamHandlerKeyDown, validKey, type Validkeys } from './type'
 //Store
 import { gameState } from '../store/game.store'
 
@@ -32,6 +32,27 @@ function useHitZone({
         })
         return resultAddId
     }
+
+
+    //Funcao responsavel por menipular combo e etc.
+    function CheckCombo({ situation }: ParamCheckCombo) {
+        const currentCombo = gameState.getState().combo
+        console.log(currentCombo)
+        if (situation == 'win') {
+            currentComboTemp.current += 1
+            if (currentComboTemp.current > currentCombo) setCombo(currentComboTemp.current)
+        }
+        else {
+            if (currentCombo < currentComboTemp.current) {
+                console.warn("Add")
+                setCombo(currentComboTemp.current)
+            }
+            currentComboTemp.current = 0
+        }
+        
+    }
+
+
     function HandlerKeyDown({ e }: ParamHandlerKeyDown) {
         //se ele for false nao passa
         if (!refDetector.current || !refParent.current) return
@@ -68,11 +89,15 @@ function useHitZone({
         const keyData = keyDataStr as Validkeys
         //Agora temos as direcao que dois.     
         //!-
-        if (keyCode == keyData) {
+        if (keyCode == keyData) { // acertou
+            CheckCombo({situation: 'win'})
             setScore()
             elTarget.classList.add('key-move-certificate')
         }
-        else elTarget.classList.add('key-move-wrong')
+        else {
+            CheckCombo({situation: 'loser'})
+            elTarget.classList.add('key-move-wrong') // errou
+        }
         console.log(keyCode == keyData ? 'Acertou' : 'errou')
     }
     
@@ -82,11 +107,16 @@ function useHitZone({
     //Store.
     //Pegar o "alterado" de score
     const setScore = gameState(state => state.increaseScore)
+    const setCombo = gameState(state => state.setCombo)
+
+    //Responsavel por guardar combo
+    const currentComboTemp = useRef<number>(1)
     useEffect(() => {
+        //CheckCombo({situation: 'loser'})
         //setInterval(() => setScore(), 5000)
     }, [])
     return {
-        HandlerKeyDown
+        HandlerKeyDown,
     }
 }
 

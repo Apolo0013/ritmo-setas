@@ -21,6 +21,8 @@ function AnimationCounter({ set, get }: ParamAnimationCounter) {
 }
 
 export const gameState = create<GameState>((set, get) => ({
+    combo: 2,
+    setCombo: (value: number) => set({ combo: value }),
     score: 0,
     scoreView: 0,
     increaseScore: (value: number = 10000) => {

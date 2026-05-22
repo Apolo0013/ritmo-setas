@@ -30,12 +30,11 @@
 
 .click-key-anime {
     $color-shadow: rgba(255, 255, 255, 0.255);
-
-    animation: fds 0.2s linear 1 forwards;
+    animation: click-animation 0.2s linear 1 forwards;
     box-shadow: 0 0 0 0 $color-shadow;  
 
 
-    @keyframes fds {
+    @keyframes click-animation {
         30% {
             transform: scale(0.95);
         }

@@ -7,6 +7,7 @@ function AudioPlayer() {
         <>
             <audio
                 className='audio-game'
+                muted
                 ref={refAudio}
                 src={AudioTeste}
             ></audio>

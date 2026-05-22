@@ -11,7 +11,8 @@ import { useAudio } from '../../store/audioContext/useAudio'
 
 
 function Header() {
-    const valueCurrentScore: number = gameState(state => state.scoreView)
+    const valueCurrentScore: number = gameState(state => state.scoreView) 
+    const valueCurrentCombo: number = gameState(state => state.combo)
     const {pauseAudio} = useAudio()!
     //store
     const setIsShow = menuPlayState(state => state.setIsShow)
@@ -22,7 +23,7 @@ function Header() {
                 <HeaderLogo />
                 <div className='play-header-info'>
                     <h2>Score: <strong>{valueCurrentScore}</strong></h2>
-                    <h2>Combo: <strong>0</strong></h2>
+                    <h2>Combo: <strong>{valueCurrentCombo}</strong></h2>
                 </div>
             </div>
             <button

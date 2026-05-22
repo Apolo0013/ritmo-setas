@@ -29,3 +29,7 @@ export type StateClassesChildren = Record<Validkeys, SetStateClass>
 export type ParamHandlerKeyDown = {
     e: KeyboardEvent
 }
+
+export type ParamCheckCombo = {
+    situation: 'win' | 'loser'
+}

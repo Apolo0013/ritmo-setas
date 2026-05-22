@@ -1,4 +1,5 @@
 @use '../../../../styles/pallete' as plt;
+@use '../../../../styles/animation.scss' as *;
 
 .play-hitzone {
     position: relative;
@@ -10,12 +11,8 @@
     $color-border: lighten(plt.$border, 20%);
     border-top: $width-border solid $color-border;
     border-bottom: $width-border solid $color-border;
-    
-    .audio-game {
-        position: absolute;
-        left: 60%;
-        top: 80%;
-    }
+    //animacao de fundo scanner
+    @include scanner-loanding;
 
     .wraper-keys-move {
         width: 100%;
