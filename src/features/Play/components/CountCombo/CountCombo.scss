@@ -1,0 +1,36 @@
+@use '../../../../styles/pallete' as plt;
+
+.count-combo {
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    background: plt.$bg-surface;
+    outline: 3px solid plt.$border;
+    border-radius: 50%;
+    position: absolute;
+    left: 80%;
+    top: 30%;
+
+    h1 {
+        line-height: 1;
+        font-size: 42px;
+        color: white;
+        font-weight: bolder;
+    }
+}
+
+.count-combo-up {
+    animation: up 0.5s ease-in-out 1 forwards;
+
+    @keyframes up {
+        50% {
+            transform: scale(1.1) translateY(-10px);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+}

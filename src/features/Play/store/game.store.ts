@@ -22,6 +22,8 @@ function AnimationCounter({ set, get }: ParamAnimationCounter) {
 
 export const gameState = create<GameState>((set, get) => ({
     combo: 2,
+    currentComboSequence: 0, // no caso é a sequencia que ele esta
+    setCurrentComboSequence: (value: number) => set({currentComboSequence: value}),
     setCombo: (value: number) => set({ combo: value }),
     score: 0,
     scoreView: 0,

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 //Type
-import {type ParamCheckCombo, type ParamHandlerKeyDown, validKey, type Validkeys } from './type'
+import {type ParamCheckCombo, type ParamHandlerKeyDown, type ParamRegisterSetValueKeyLost, validKey, type Validkeys } from './type'
 //Store
 import { gameState } from '../store/game.store'
+import { useAudio } from '../store/audioContext/useAudio'
 
 
 type ParamuseHitZone = {
@@ -14,6 +15,31 @@ function useHitZone({
     refDetector,
     refParent
 }: ParamuseHitZone) {
+    function LoopMissingKey() {
+        const timer = setInterval(() => {
+            MissingKeys()
+            if (!runningLoopMissingKey.current) clearInterval(timer)
+        }, 250)
+    }
+
+    function MissingKeys() {
+        if (!refDetector.current) return
+        const { right } = refDetector.current.getBoundingClientRect()
+        for (const el of childrenKeys.current) {
+            const { left } = el.getBoundingClientRect()
+            const id: string = el.dataset.id! // Confia, nao sera unfined
+            const keyLost = el.dataset.lost
+            console.log(keyLost)
+            if (left > right + 50) { //se a key passa do detector depois de 50px
+                //setValueKeyLostList: Uma Lista com uma funcao que mexe com um estado em outro componente.
+                //keyLost: Essa Key foi perdida?
+                if (keyLost == 'yes') setValueKeyLostList.current[id](true)
+                setlistOfMissingKeys(prev => [...prev, id])
+            }
+        }
+    }
+
+
     function keyAlreadyCliked(el: HTMLElement): boolean {
         //true: essa tecla ja foi clicada ou algo deu errado
         //el: é o elemento que representa a ceta
@@ -49,20 +75,21 @@ function useHitZone({
             }
             currentComboTemp.current = 0
         }
-        
+        //aqui vamos add a sequencia que ele esta.
+        //! - Ou ele tem 0 ou tem 1,2,3 ......... assim por diante.
+        setCurrentComboSequence(currentComboTemp.current)
     }
 
 
     function HandlerKeyDown({ e }: ParamHandlerKeyDown) {
+        MissingKeys()
         //se ele for false nao passa
         if (!refDetector.current || !refParent.current) return
         const rectDetector: DOMRect = refDetector.current.getBoundingClientRect()
         const centroX: number = rectDetector.left + rectDetector.width / 2
-        //children seria o as cetas.
-        const children = [...refParent.current.children] as HTMLElement[]
         //key que foi "clicada"
         let elTarget: HTMLElement | null = null
-        for (const el of children) {
+        for (const el of childrenKeys.current) {
             const rectE: DOMRect = el.getBoundingClientRect()
             const colidiu: boolean =
                 centroX <= rectE.right &&
@@ -87,16 +114,18 @@ function useHitZone({
         const keyDataStr: string | undefined = elTarget.dataset.direction
         if (!keyDataStr) return //caso nao nao tenha.
         const keyData = keyDataStr as Validkeys
-        //Agora temos as direcao que dois.     
-        //!-
+        //Agora temos as direcao que dois.
         if (keyCode == keyData) { // acertou
-            CheckCombo({situation: 'win'})
-            setScore()
+            CheckCombo({ situation: 'win' }) // checando o combo
+            setScore() // setando o pontos
+            // animacao
             elTarget.classList.add('key-move-certificate')
+            elTarget.dataset.lost = 'no' // key perdida??
         }
         else {
-            CheckCombo({situation: 'loser'})
-            elTarget.classList.add('key-move-wrong') // errou
+            CheckCombo({ situation: 'loser' }) // checando o combo
+            // animacao
+            elTarget.classList.add('key-move-wrong') // errou 
         }
         console.log(keyCode == keyData ? 'Acertou' : 'errou')
     }
@@ -104,19 +133,38 @@ function useHitZone({
     //state
     //state que irar guardar
     const [_, setlistOfKeysClicked] = useState<string[]>([])
+    const [F3, setlistOfMissingKeys] = useState<string[]>([])
     //Store.
     //Pegar o "alterado" de score
     const setScore = gameState(state => state.increaseScore)
     const setCombo = gameState(state => state.setCombo)
-
+    const setCurrentComboSequence = gameState(state => state.setCurrentComboSequence)
     //Responsavel por guardar combo
-    const currentComboTemp = useRef<number>(1)
+    const currentComboTemp = useRef<number>(0)
+    //children seria o as cetas.
+    const childrenKeys = useRef<HTMLDivElement[]>([])
+    //Responsavel por controla o loop
+    const runningLoopMissingKey = useRef<boolean>(true)
+    //SetValue, das Key-Lost
+    function RegisterSetValueKeyLost({cb, id}: ParamRegisterSetValueKeyLost) {
+        setValueKeyLostList.current[id] = cb
+    }
+    
+    const setValueKeyLostList = useRef<{ [key: string]: (value: boolean) => void }>({})
+    
+    const {pauseAudio} = useAudio()!
     useEffect(() => {
-        //CheckCombo({situation: 'loser'})
-        //setInterval(() => setScore(), 5000)
+        if (!refParent.current) return
+        childrenKeys.current = [...refParent.current.children] as HTMLDivElement[]
+    }, [refParent.current])
+
+    useEffect(() => {
+        LoopMissingKey()
+        return () => {runningLoopMissingKey.current = false}
     }, [])
     return {
         HandlerKeyDown,
+        RegisterSetValueKeyLost
     }
 }
 

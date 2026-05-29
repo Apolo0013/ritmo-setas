@@ -3,6 +3,8 @@ import type { StateCreator } from "zustand"
 
 export type GameState = {
     combo: number,
+    currentComboSequence: number,
+    setCurrentComboSequence: (value: number) => void,
     setCombo: (value: number) => void
     score: number, // score real.
     increaseScore: (value?: number) => void, // a funcao que vai add esse valor

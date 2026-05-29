@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction } from 'react'
+import { type Dispatch, type RefObject, type SetStateAction } from 'react'
 
 
 
@@ -32,4 +32,32 @@ export type ParamHandlerKeyDown = {
 
 export type ParamCheckCombo = {
     situation: 'win' | 'loser'
+}
+
+//UseGame
+export type ParamuseGame = {
+    refDetector: RefObject<HTMLDivElement | null>,
+    refParent: RefObject<HTMLDivElement | null>
+}
+
+export type GradeInformation = {
+    time: number,
+    order: number,
+    lane: number,
+    direction: Validkeys,
+    angle: Direction
+}
+
+export interface GradeInformationEl extends GradeInformation {
+    el: HTMLElement
+}
+
+export type ParamgetX = {
+    noteTime: number,
+    currentTime: number
+}
+
+export type ParamRegisterSetValueKeyLost = {
+    cb: (value: boolean) => void,
+    id: string
 }

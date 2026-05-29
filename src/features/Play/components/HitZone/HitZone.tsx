@@ -1,6 +1,4 @@
 import './HitZone.scss'
-//imagens
-import { imagens } from '../../../../shared/assets/index'
 //Hook
 import useHitZone from '../../hook/useHitZone'
 import { useEffect, useRef } from 'react'
@@ -8,6 +6,7 @@ import { useEffect, useRef } from 'react'
 import { addCallBackKeyDown } from '../../../../shared/services/keydownManager'
 import useGame from '../../hook/useGame'
 import { useAudio } from '../../store/audioContext/useAudio'
+import KeyPlayer from './KeyPlayer'
 
 function HitZone() {
     //ref
@@ -15,7 +14,8 @@ function HitZone() {
     const refParent = useRef<HTMLDivElement | null>(null)
     //hook
     const {
-        HandlerKeyDown
+        HandlerKeyDown,
+        RegisterSetValueKeyLost
     } = useHitZone({
         refDetector, 
         refParent
@@ -48,35 +48,17 @@ function HitZone() {
                 {
                     notes ?
                         notes.map(({ direction, angle, lane, order, time}, k) => (
-                            <div
-                                //aqui vamos "recriar" a lista gerada mais com elemento incluso nele
-                                ref={ref => {
-                                    if (!ref) return
-                                    refNotesEl.current.push({
-                                        angle: angle,
-                                        direction: direction,
-                                        el: ref,
-                                        lane: lane,
-                                        order: order,
-                                        time: time
-                                    })
-                                }}
-                                
-                                //
-                                className='key-move'
+                            <KeyPlayer
+                                RegisterSetValueKeyLost={RegisterSetValueKeyLost}
+                                angle={angle}
+                                direction={direction}
+                                lane={lane}
+                                k={k}
+                                order={order}
+                                refNotesEl={refNotesEl}
+                                time={time}
                                 key={k}
-                                //data
-                                data-direction={direction}
-                                //id dele
-                                data-id={`${k} - ${direction} - ${angle}`}
-                                //direcao
-                                style={{transform: `rotate(${angle})`}}
-                            >
-                                <img
-                                    src={imagens.arrow}
-                                    alt="Imagem de um ceta"
-                                />
-                            </div>
+                            />
                     ))
                         : null
                 }

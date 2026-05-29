@@ -1,28 +1,15 @@
-import { useEffect, useRef, useState, type RefObject } from "react"
-import { directions, validKey, type Direction, type Validkeys } from "./type"
+import { useEffect, useRef, useState} from "react"
+import {
+    directions,
+    validKey,
+    type ParamuseGame,
+    type ParamgetX,
+    type GradeInformation,
+    type GradeInformationEl,
+    type Validkeys
+} from "./type"
 import { useAudio } from "../store/audioContext/useAudio"
 
-type ParamuseGame = {
-    refDetector: RefObject<HTMLDivElement | null>,
-    refParent: RefObject<HTMLDivElement | null>
-}
-
-type GradeInformation = {
-    time: number,
-    order: number,
-    lane: number,
-    direction: Validkeys,
-    angle: Direction
-}
-
-interface GradeInformationEl extends GradeInformation {
-    el: HTMLElement
-}
-
-type ParamgetX = {
-    noteTime: number,
-    currentTime: number
-}
 
 function useGame({ 
     refDetector,
@@ -50,10 +37,10 @@ function useGame({
             })
             el.style.transform = ` 
                 translateX(${X}px)
-                rotate(${angle})
+                /*rotate(${angle})*/
             ` // colocando as posicao
             // - posicao X
-            // - ir manter o angulo/angle
+            // - ir manter o angulo/angle !- nao sera mais necessario.
         })
     }
 
