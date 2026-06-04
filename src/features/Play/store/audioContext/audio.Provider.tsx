@@ -1,6 +1,7 @@
 
 import {
     useRef,
+    useState,
     type ReactNode,
 } from 'react'
 
@@ -19,13 +20,19 @@ function AudioProvider({children}: {children: ReactNode}) {
     }
 
     const refAudio = useRef<HTMLAudioElement | null>(null)
+    //listas do callback
+    const [listCbTimeUpdate, setListCbTimeUpdate] = useState<Array<() => void>>([])
 
     return (
         <AudioContext.Provider
             value={{
                 pauseAudio,
                 playAudio,
-                refAudio
+                refAudio,
+                setListCbTimeUpdate: (cb) => {
+                    setListCbTimeUpdate(prev => ([...prev, cb]))
+                },
+                listCbTimeUpdate: listCbTimeUpdate
             }}
         >
             {children}

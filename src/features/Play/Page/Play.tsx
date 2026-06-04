@@ -4,6 +4,7 @@ import Header from '../components/Header/Header'
 import HitZone from '../components/HitZone/HitZone'
 import MenuPlay from '../components/MenuPlay/index'
 import ShowKeys from '../components/ShowKeys/ShowKeys'
+import SongProgressBar from '../components/SongProgressBar/SongProgressBar'
 import AudioProvider from '../store/audioContext/audio.Provider'
 import AudioPlayer from '../store/audioContext/AudioPlayer'
 //store
@@ -27,7 +28,6 @@ function Play() {
                         ? <CountCombo />
                         : null
                 }
-
                 <AudioPlayer />
                 { 
                     isCount && isPause
@@ -40,6 +40,7 @@ function Play() {
                         : null
                 }
                 <Header />
+                <SongProgressBar />
                 <ShowKeys />
                 <HitZone />
             </AudioProvider>

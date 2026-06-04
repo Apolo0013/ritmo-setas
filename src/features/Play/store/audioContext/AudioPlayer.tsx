@@ -2,7 +2,10 @@ import { useAudio } from "./useAudio"
 import AudioTeste from '../../Page/Slipknot - The Blister Exists (Audio) - Slipknot (youtube).mp3'
 
 function AudioPlayer() {
-    const {refAudio} = useAudio()!
+    const {
+        refAudio,
+        listCbTimeUpdate
+    } = useAudio()!
     return (
         <>
             <audio
@@ -10,6 +13,11 @@ function AudioPlayer() {
                 muted
                 ref={refAudio}
                 src={AudioTeste}
+
+                onTimeUpdate={() => {
+                    console.log(listCbTimeUpdate)
+                    listCbTimeUpdate.forEach((cb) => {cb()})
+                }}
             ></audio>
         </>
     )

@@ -29,7 +29,6 @@ function useHitZone({
             const { left } = el.getBoundingClientRect()
             const id: string = el.dataset.id! // Confia, nao sera unfined
             const keyLost = el.dataset.lost
-            console.log(keyLost)
             if (left > right + 50) { //se a key passa do detector depois de 50px
                 //setValueKeyLostList: Uma Lista com uma funcao que mexe com um estado em outro componente.
                 //keyLost: Essa Key foi perdida?
