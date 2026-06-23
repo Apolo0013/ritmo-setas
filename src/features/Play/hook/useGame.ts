@@ -88,7 +88,7 @@ function useGame({
     //notas geradas
     const [notes, setnotes] = useState<GradeInformation[] | null>([])
     const refNotesEl = useRef<GradeInformationEl[]>([])
-    
+
     useEffect(() => {
         if (!refParent.current || !refDetector.current) return
         //informacao

@@ -4,7 +4,6 @@
 .wraper-song-progress-bar {
     width: 90%;
     height: 50px;
-    outline: 1px solid red;
     display: grid;
     grid-template-columns: 80% auto;
     grid-template-rows: 100%;
@@ -19,20 +18,44 @@
 
         .song-progress {
             transition: width 0.5s ease-in-out;
-            background: plt.$primary;
-            width: 100%;
+            $bg-lighten: lighten(plt.$primary, 10%);
+            background: 
+                linear-gradient(
+                    90deg,
+                    plt.$primary 5%,
+                    $bg-lighten 10%,
+                    $bg-lighten 20%,
+                    plt.$primary 25%
+                )
+            ;
+            background-size: 200% 100%;
+            animation: move-bg-progress 5s linear infinite forwards;
             height: 100%;
+
+            @keyframes move-bg-progress {
+                from {
+                    background-position-x: 200%;
+                }
+                to {
+                    background-position-x: 0%;
+                }
+            }
         }
     }
 
     .song-time {
         @include flex-center;
+        gap: 4px;
         width: 100%;
         height: 100%;
 
         p {
             font-weight: bolder;
             font-size: 28px;
+        }
+
+        p:nth-child(2) {
+            color: plt.$primary;
         }
     }
 }

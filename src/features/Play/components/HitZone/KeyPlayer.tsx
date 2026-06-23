@@ -15,15 +15,26 @@ type PropsKeyPlayer = {
     order: number,
     refNotesEl: RefObject<GradeInformationEl[]>,
     //registrar a funcao
-    RegisterSetValueKeyLost: ({cb, id}: ParamRegisterSetValueKeyLost) => void
+    registerKeyLost: ({ cb, id }: ParamRegisterSetValueKeyLost) => void,
+    registerRefKey: (ref: HTMLDivElement) => void
 }
 
-function KeyPlayer({ angle, lane, time, direction, order, refNotesEl, k, RegisterSetValueKeyLost }: PropsKeyPlayer) {
+function KeyPlayer({
+    angle,
+    lane,
+    time,
+    direction,
+    order,
+    refNotesEl,
+    k,
+    registerRefKey,
+    registerKeyLost
+}: PropsKeyPlayer) {
     
     const [isLost, setIsLost] = useState<boolean>(false)
     const idEl: string = `${k} - ${direction} - ${angle}`
     useEffect(() => {
-        RegisterSetValueKeyLost({
+        registerKeyLost({
             cb: (value: boolean) => setIsLost(value),
             id: idEl
         })
@@ -41,6 +52,8 @@ function KeyPlayer({ angle, lane, time, direction, order, refNotesEl, k, Registe
             //aqui vamos "recriar" a lista gerada mais com elemento incluso nele            
             ref={ref => {
                     if (!ref) return
+                    //registrando a referencia.
+                    registerRefKey(ref)
                     //Verifique esse refNotesEl
                     refNotesEl.current.push({
                         angle: angle,

@@ -1,11 +1,8 @@
 
 import './SongProgressBar.scss'
 import useSongProgressBar from '../../hook/useSongProgressBar'
-type PropsSongProgressBar = {
-    width: string
-}
 
-function SongProgressBar({ width = '1%' }: PropsSongProgressBar) {
+function SongProgressBar() {
     const {
         percentage,
         currentTime,
@@ -16,11 +13,15 @@ function SongProgressBar({ width = '1%' }: PropsSongProgressBar) {
             <div className='song-bar'>
                 <div
                     className='song-progress'
-                    style={{width: percentage + '%'}}
+                    style={{
+                        width: '50%' ///percentage + '%'
+                    }}
                 ></div>
             </div>
             <div className='song-time'>
-                <p>{currentTime} / {durationSong}</p>
+                <p>{currentTime}</p>
+                <p>/</p>
+                <p>{durationSong}</p>
             </div>
         </div>
     )

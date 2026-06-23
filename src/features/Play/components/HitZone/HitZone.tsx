@@ -7,19 +7,12 @@ import { addCallBackKeyDown } from '../../../../shared/services/keydownManager'
 import useGame from '../../hook/useGame'
 import { useAudio } from '../../store/audioContext/useAudio'
 import KeyPlayer from './KeyPlayer'
+import useGameResult from '../../hook/useGameResult'
 
 function HitZone() {
     //ref
     const refDetector = useRef<HTMLDivElement | null>(null)
     const refParent = useRef<HTMLDivElement | null>(null)
-    //hook
-    const {
-        HandlerKeyDown,
-        RegisterSetValueKeyLost
-    } = useHitZone({
-        refDetector, 
-        refParent
-    })
     //hook principal, onde ele vai move as keys/setas
     const {
         notes,
@@ -28,10 +21,21 @@ function HitZone() {
         refDetector,
         refParent
     })
-    //faca que o menuplay tenha o poder de play/pause e teste o contexto
+    //hook
+    const {
+        handlerKeyDown,
+        registerKeyLost,
+        registerRefKey
+    } = useHitZone({
+        refDetector, 
+        refParent,
+        refNotesEl
+    })
+    //Registrado o evento do GameResult.tsx
+    useGameResult()
     //use Effect
     useEffect(() => {
-        addCallBackKeyDown((e) => HandlerKeyDown({
+        addCallBackKeyDown((e) => handlerKeyDown({
             e
         }))
     }, [])
@@ -49,7 +53,6 @@ function HitZone() {
                     notes ?
                         notes.map(({ direction, angle, lane, order, time}, k) => (
                             <KeyPlayer
-                                RegisterSetValueKeyLost={RegisterSetValueKeyLost}
                                 angle={angle}
                                 direction={direction}
                                 lane={lane}
@@ -58,6 +61,9 @@ function HitZone() {
                                 refNotesEl={refNotesEl}
                                 time={time}
                                 key={k}
+                                //registradoras
+                                registerRefKey={registerRefKey}
+                                registerKeyLost={registerKeyLost}
                             />
                     ))
                         : null

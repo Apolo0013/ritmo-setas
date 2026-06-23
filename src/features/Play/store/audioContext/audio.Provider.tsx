@@ -21,7 +21,10 @@ function AudioProvider({children}: {children: ReactNode}) {
 
     const refAudio = useRef<HTMLAudioElement | null>(null)
     //listas do callback
+    //evento timeupdate
     const [listCbTimeUpdate, setListCbTimeUpdate] = useState<Array<() => void>>([])
+    //evento ended
+    const [listCbEnd, setListCbEnd] = useState<Array<() => void>>([])
 
     return (
         <AudioContext.Provider
@@ -32,7 +35,11 @@ function AudioProvider({children}: {children: ReactNode}) {
                 setListCbTimeUpdate: (cb) => {
                     setListCbTimeUpdate(prev => ([...prev, cb]))
                 },
-                listCbTimeUpdate: listCbTimeUpdate
+                listCbTimeUpdate: listCbTimeUpdate,
+                listCbEnd: listCbEnd,
+                setListCbEndAudio: (cb) => {
+                    setListCbEnd(prev => ([...prev, cb]))
+                }
             }}
         >
             {children}

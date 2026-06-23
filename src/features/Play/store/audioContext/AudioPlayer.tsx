@@ -4,7 +4,8 @@ import AudioTeste from '../../Page/Slipknot - The Blister Exists (Audio) - Slipk
 function AudioPlayer() {
     const {
         refAudio,
-        listCbTimeUpdate
+        listCbTimeUpdate,
+        listCbEnd
     } = useAudio()!
     return (
         <>
@@ -15,8 +16,10 @@ function AudioPlayer() {
                 src={AudioTeste}
 
                 onTimeUpdate={() => {
-                    console.log(listCbTimeUpdate)
                     listCbTimeUpdate.forEach((cb) => {cb()})
+                }}
+                onEnded={() => {
+                    listCbEnd.forEach(cb => {cb()})
                 }}
             ></audio>
         </>

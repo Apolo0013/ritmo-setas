@@ -5,11 +5,13 @@ import ImgPlay from '../../../../shared/assets/play.svg'
 //context e store
 import { useAudio } from '../../store/audioContext/useAudio'
 import { menuPlayState } from '../../store/menuPlay.store'
+import useGameResult from '../../hook/useGameResult'
 
 
 function MenuStart() {
     //context
     const context = useAudio()!
+    const {fds} = useGameResult()
     //responsavel por mudar o valor de um estado, que controla 2 UI
     const setIsPause = menuPlayState(state => state.setIsPause)
     const setIsShow = menuPlayState(state => state.setIsShow)
@@ -24,6 +26,7 @@ function MenuStart() {
                     setIsPause(true) // exbir o UI de pause
                     setIsShow(false) // retirar o menu da tela.
                     context.playAudio() // iniciando o audio.
+                    fds()
                 }}
             >
                 <img

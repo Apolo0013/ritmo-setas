@@ -38,7 +38,10 @@ function useSongProgressBar() {
         SetTimeUpdate() // atualizando o tempo atual da musica
     }
 
-    const { setListCbTimeUpdate, refAudio } = useAudio()!
+    const {
+        setListCbTimeUpdate,
+        refAudio
+    } = useAudio()!
     
     const [percentage, setPercentage] = useState<number>(0)
     const [currentTime, setCurrentTime] = useState<string>('--:--')

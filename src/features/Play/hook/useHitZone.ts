@@ -1,21 +1,28 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 //Type
-import {type ParamCheckCombo, type ParamHandlerKeyDown, type ParamRegisterSetValueKeyLost, validKey, type Validkeys } from './type'
+import {type GradeInformationEl, type ParamCheckCombo, type ParamHandlerKeyDown, type ParamRegisterSetValueKeyLost, validKey, type Validkeys } from './type'
 //Store
 import { gameState } from '../store/game.store'
-import { useAudio } from '../store/audioContext/useAudio'
-
 
 type ParamuseHitZone = {
     refDetector: RefObject<HTMLDivElement | null>,
-    refParent: RefObject<HTMLDivElement | null>
+    refParent: RefObject<HTMLDivElement | null>,
+    refNotesEl: RefObject<GradeInformationEl[]>
 }
 
 function useHitZone({
     refDetector,
-    refParent
+    refParent,
+    refNotesEl
 }: ParamuseHitZone) {
-    function LoopMissingKey() {
+    //SetValue, das Key-Lost
+    function registerKeyLost({cb, id}: ParamRegisterSetValueKeyLost) {
+        setValueKeyLostList.current[id] = cb
+    }
+
+    function registerRefKey(ref: HTMLDivElement) { childrenKeys.current.push(ref)}
+
+    function loopMissingKey() {
         const timer = setInterval(() => {
             MissingKeys()
             if (!runningLoopMissingKey.current) clearInterval(timer)
@@ -60,7 +67,7 @@ function useHitZone({
 
 
     //Funcao responsavel por menipular combo e etc.
-    function CheckCombo({ situation }: ParamCheckCombo) {
+    function checkCombo({ situation }: ParamCheckCombo) {
         const currentCombo = gameState.getState().combo
         console.log(currentCombo)
         if (situation == 'win') {
@@ -80,7 +87,7 @@ function useHitZone({
     }
 
 
-    function HandlerKeyDown({ e }: ParamHandlerKeyDown) {
+    function handlerKeyDown({ e }: ParamHandlerKeyDown) {
         MissingKeys()
         //se ele for false nao passa
         if (!refDetector.current || !refParent.current) return
@@ -88,17 +95,19 @@ function useHitZone({
         const centroX: number = rectDetector.left + rectDetector.width / 2
         //key que foi "clicada"
         let elTarget: HTMLElement | null = null
+        console.log(childrenKeys.current.length)
         for (const el of childrenKeys.current) {
             const rectE: DOMRect = el.getBoundingClientRect()
             const colidiu: boolean =
                 centroX <= rectE.right &&
                 centroX >= rectE.left
-            
+            console.warn(colidiu)
             if (colidiu) {
                 elTarget = el
                 break
             }
         }
+        console.log(elTarget)
         //caso ele for nulo que dizer que nenhum key foi clicado
         if (!elTarget) return
         //essa key ja foi "clicado"
@@ -115,14 +124,14 @@ function useHitZone({
         const keyData = keyDataStr as Validkeys
         //Agora temos as direcao que dois.
         if (keyCode == keyData) { // acertou
-            CheckCombo({ situation: 'win' }) // checando o combo
+            checkCombo({ situation: 'win' }) // checando o combo
             setScore() // setando o pontos
             // animacao
             elTarget.classList.add('key-move-certificate')
             elTarget.dataset.lost = 'no' // key perdida??
         }
         else {
-            CheckCombo({ situation: 'loser' }) // checando o combo
+            checkCombo({ situation: 'loser' }) // checando o combo
             // animacao
             elTarget.classList.add('key-move-wrong') // errou 
         }
@@ -131,8 +140,8 @@ function useHitZone({
     
     //state
     //state que irar guardar
-    const [_, setlistOfKeysClicked] = useState<string[]>([])
-    const [F3, setlistOfMissingKeys] = useState<string[]>([])
+    const [kc , setlistOfKeysClicked] = useState<string[]>([])
+    const [mk, setlistOfMissingKeys] = useState<string[]>([])
     //Store.
     //Pegar o "alterado" de score
     const setScore = gameState(state => state.increaseScore)
@@ -144,26 +153,16 @@ function useHitZone({
     const childrenKeys = useRef<HTMLDivElement[]>([])
     //Responsavel por controla o loop
     const runningLoopMissingKey = useRef<boolean>(true)
-    //SetValue, das Key-Lost
-    function RegisterSetValueKeyLost({cb, id}: ParamRegisterSetValueKeyLost) {
-        setValueKeyLostList.current[id] = cb
-    }
-    
+    //SetState dos valores key lost
     const setValueKeyLostList = useRef<{ [key: string]: (value: boolean) => void }>({})
-    
-    const {pauseAudio} = useAudio()!
     useEffect(() => {
-        if (!refParent.current) return
-        childrenKeys.current = [...refParent.current.children] as HTMLDivElement[]
-    }, [refParent.current])
-
-    useEffect(() => {
-        LoopMissingKey()
+        loopMissingKey()
         return () => {runningLoopMissingKey.current = false}
     }, [])
     return {
-        HandlerKeyDown,
-        RegisterSetValueKeyLost
+        handlerKeyDown,
+        registerKeyLost,
+        registerRefKey
     }
 }
 

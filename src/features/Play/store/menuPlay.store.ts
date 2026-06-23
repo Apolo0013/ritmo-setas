@@ -9,7 +9,7 @@ type MenuPlayState = {
 
 export const menuPlayState = create<MenuPlayState>((set) => ({
     // responsavel por mostrar o menu play
-    isShow: false,
+    isShow: true,
     setIsShow: (value: boolean) => set({
         isShow: value
     }),
