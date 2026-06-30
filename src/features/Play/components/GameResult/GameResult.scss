@@ -89,6 +89,7 @@
             height: 50px;
 
             .game-result-button {
+                cursor: pointer;
                 @include flex-center;
                 gap: 16px;
                 border-radius: 10px;

@@ -30,7 +30,7 @@ function useGame({
     function render() {
         if (!refAudio || !refAudio.current) return
         const currentTime: number = refAudio.current.currentTime * 1000
-        refNotesEl.current.forEach(({ el, time, angle}) => {
+        refNotesEl.current.forEach(({ el, time, angle }) => {
             const X: number = getX({ // calculo o eixo X dele
                 currentTime,
                 noteTime: time
@@ -41,6 +41,10 @@ function useGame({
             ` // colocando as posicao
             // - posicao X
             // - ir manter o angulo/angle !- nao sera mais necessario.
+            //Guardando a posicao dele.
+            //Retirada da animacao de perdido na key
+            //const idEl = el.dataset.id as string
+            //refPosKey.current[idEl] = X
         })
     }
 
@@ -88,6 +92,9 @@ function useGame({
     //notas geradas
     const [notes, setnotes] = useState<GradeInformation[] | null>([])
     const refNotesEl = useRef<GradeInformationEl[]>([])
+    //posicao de cada key
+
+    const refPosKey = useRef<Record<string, number>>({})
 
     useEffect(() => {
         if (!refParent.current || !refDetector.current) return
@@ -107,7 +114,8 @@ function useGame({
 
     return {
         notes,
-        refNotesEl
+        refNotesEl,
+        refPosKey
     }
 }
 

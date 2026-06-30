@@ -7,14 +7,15 @@ import { gameState } from '../store/game.store'
 type ParamuseHitZone = {
     refDetector: RefObject<HTMLDivElement | null>,
     refParent: RefObject<HTMLDivElement | null>,
-    refNotesEl: RefObject<GradeInformationEl[]>
+    refPosKey: RefObject<Record<string, number>>
 }
 
 function useHitZone({
     refDetector,
     refParent,
-    refNotesEl
+    refPosKey
 }: ParamuseHitZone) {
+
     //SetValue, das Key-Lost
     function registerKeyLost({cb, id}: ParamRegisterSetValueKeyLost) {
         setValueKeyLostList.current[id] = cb
@@ -29,18 +30,27 @@ function useHitZone({
         }, 250)
     }
 
-    function MissingKeys() {
-        if (!refDetector.current) return
-        const { right } = refDetector.current.getBoundingClientRect()
+    function MissingKeys() { // SUSPEITO
+        if (!rightDetector.current) return
         for (const el of childrenKeys.current) {
-            const { left } = el.getBoundingClientRect()
             const id: string = el.dataset.id! // Confia, nao sera unfined
+            if (!id) return
+            const left: number = refPosKey.current[id]
             const keyLost = el.dataset.lost
-            if (left > right + 50) { //se a key passa do detector depois de 50px
+            console.clear()
+            console.log(left)
+            console.log(rightDetector.current)
+            
+            if (
+                left > rightDetector.current &&
+                left > rightDetector.current + 50 &&
+                !listOfMissingKeys.current.includes(id)
+            ) { //se a key passa do detector depois de 50px
                 //setValueKeyLostList: Uma Lista com uma funcao que mexe com um estado em outro componente.
                 //keyLost: Essa Key foi perdida?
                 if (keyLost == 'yes') setValueKeyLostList.current[id](true)
-                setlistOfMissingKeys(prev => [...prev, id])
+                //setlistOfMissingKeys(prev => [...prev, id])
+                listOfMissingKeys.current.push(id)
             }
         }
     }
@@ -137,11 +147,14 @@ function useHitZone({
         }
         console.log(keyCode == keyData ? 'Acertou' : 'errou')
     }
-    
+    //posicao direito do detector
+    const rightDetector = useRef<number | null>(null)
     //state
     //state que irar guardar
-    const [kc , setlistOfKeysClicked] = useState<string[]>([])
-    const [mk, setlistOfMissingKeys] = useState<string[]>([])
+    const [kc, setlistOfKeysClicked] = useState<string[]>([])
+    //TROCA DO state para Ref
+    //const [listOfMissingKeys, setlistOfMissingKeys] = useState<string[]>([])
+    const listOfMissingKeys = useRef<string[]>([])
     //Store.
     //Pegar o "alterado" de score
     const setScore = gameState(state => state.increaseScore)
@@ -156,9 +169,17 @@ function useHitZone({
     //SetState dos valores key lost
     const setValueKeyLostList = useRef<{ [key: string]: (value: boolean) => void }>({})
     useEffect(() => {
-        loopMissingKey()
+        //Retirada a animacao de perdido na Key
+        //loopMissingKey()
         return () => {runningLoopMissingKey.current = false}
     }, [])
+
+    useEffect(() => {
+        if (!refDetector.current) return
+        const { right } = refDetector.current.getBoundingClientRect()
+        rightDetector.current = right
+    }, [refDetector.current])
+
     return {
         handlerKeyDown,
         registerKeyLost,

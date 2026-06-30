@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { GameState, ParamAnimationCounter} from "./type";
+import { useId } from "react";
 
 function AnimationCounter({ set, get }: ParamAnimationCounter) {
     const increase: number = 250 // de quanto em quanto ele vai add
@@ -26,6 +27,11 @@ export const gameState = create<GameState>((set, get) => ({
     setCurrentComboSequence: (value: number) => set({currentComboSequence: value}),
     setCombo: (value: number) => set({ combo: value }),
     score: 0,
+    setScore: (value: number) => {
+        set({
+            score: value
+        })
+    },
     scoreView: 0,
     increaseScore: (value: number = 10000) => {
         set(prev => ({
@@ -34,5 +40,12 @@ export const gameState = create<GameState>((set, get) => ({
             score: prev.score + value
         }))
         AnimationCounter({ set, get })
+    },
+    //Key do hitzone
+    keyHitZone: 0,
+    resetKeyHitZone: () => {
+        set(prev => ({
+            keyHitZone: prev.keyHitZone + 1
+        }))
     }
 }))

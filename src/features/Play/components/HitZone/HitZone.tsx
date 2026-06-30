@@ -8,15 +8,19 @@ import useGame from '../../hook/useGame'
 import { useAudio } from '../../store/audioContext/useAudio'
 import KeyPlayer from './KeyPlayer'
 import useGameResult from '../../hook/useGameResult'
+import { gameState } from '../../store/game.store'
 
 function HitZone() {
+    //store
+    const keyHitZone = gameState(state => state.keyHitZone)
     //ref
     const refDetector = useRef<HTMLDivElement | null>(null)
     const refParent = useRef<HTMLDivElement | null>(null)
     //hook principal, onde ele vai move as keys/setas
     const {
         notes,
-        refNotesEl
+        refNotesEl,
+        refPosKey
     } = useGame({
         refDetector,
         refParent
@@ -29,7 +33,8 @@ function HitZone() {
     } = useHitZone({
         refDetector, 
         refParent,
-        refNotesEl
+        refNotesEl,
+        refPosKey
     })
     //Registrado o evento do GameResult.tsx
     useGameResult()
@@ -40,7 +45,7 @@ function HitZone() {
         }))
     }, [])
     return (
-        <div className='play-hitzone'>
+        <div className='play-hitzone' key={keyHitZone}>
             <div
                 className="detector"
                 ref={refDetector}

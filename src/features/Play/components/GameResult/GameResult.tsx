@@ -3,6 +3,7 @@ import './GameResult.scss'
 import LoopImg from '../../assets/loop.svg'
 import HomeImg from '../../assets/home.svg'
 import { gameState } from '../../store/game.store'
+import useGameResult from '../../hook/useGameResult'
 
 type PropsGameResult = {
 }
@@ -12,6 +13,11 @@ function GameResult() {
         combo,
         score
     } = gameState()
+    //hook
+    const { 
+        onClickGoBackHome,
+        onClickTryAgain
+    } = useGameResult()
 
     return (
         <div className="wraper-game-result">
@@ -36,6 +42,7 @@ function GameResult() {
                 <div className="game-result-buttons">
                     <button
                         className='game-result-button'
+                        onClick={onClickTryAgain}
                     >
                         <img
                             src={LoopImg}
@@ -45,6 +52,7 @@ function GameResult() {
                     </button>
                     <button
                         className='game-result-button'
+                        onClick={onClickGoBackHome}
                     >
                         <img
                             src={HomeImg}

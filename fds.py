@@ -1,5 +1,5 @@
-import math
+fds1 = 750#-115814.872
+fds = 738
 
-total = 320.0
-parte = 8.492666
-print((parte / total) * 100)
+print(f"para ele ser aceito quero se ele seja maior do que: {fds + 50}")
+print(f"ele é maior do que ele? {fds1 > fds}")
