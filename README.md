@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# Ritmo Setas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto desenvolvido em **React**, **TypeScript** e **SCSS** com o objetivo de recriar, na web, o minigame de ritmo presente em **Grand Theft Auto: San Andreas**.
 
-Currently, two official plugins are available:
+> **Status:** Projeto demonstrativo (não finalizado).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Sobre
 
-## React Compiler
+A ideia deste projeto foi reproduzir a mecânica do jogo de ritmo do GTA San Andreas utilizando tecnologias web. Apesar de ainda não estar 100% funcional, o projeto demonstra boa parte da lógica implementada para sincronização das notas, leitura de inputs e renderização em tempo real.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Grande parte dos cálculos matemáticos utilizados para a lógica do jogo contou com auxílio do **ChatGPT**, enquanto toda a implementação e adaptação para o projeto foram desenvolvidas por mim.
 
-## Expanding the ESLint configuration
+## Tecnologias
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React
+- TypeScript
+- SCSS
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Como executar
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Clone o repositório:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone <url-do-repositorio>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Instale as dependências:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+Inicie o projeto:
+
+```bash
+npm run dev
+```
+
+## Música utilizada
+
+Durante o desenvolvimento foi utilizada a música:
+
+**Slipknot – The Blister Exists**
+
+> A música é utilizada apenas para fins demonstrativos neste projeto pessoal, sem finalidade comercial.
+
+## Imagens
+
+### Referência do jogo
+
+![Gta San](assets/Gta Sandreas.webp)
+
+### Capa do álbum
+
+![Album](assets/slipknot-album.jpg)
+
+### Projeto em funcionamento
+
+![Projeto](assets/game.gif)
+
+## Observações
+
+Este projeto foi desenvolvido com o intuito de estudo e demonstração de conhecimentos em React, TypeScript e manipulação de lógica de jogos em ambiente web. Não possui objetivo de produção ou distribuição comercial.
