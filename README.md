@@ -48,7 +48,7 @@ Durante o desenvolvimento foi utilizada a música:
 
 ### Referência do jogo
 
-![Gta San](assets/Gta Sandreas.webp)
+![Gta San](assets/gta-san.webp)
 
 ### Capa do álbum
 
